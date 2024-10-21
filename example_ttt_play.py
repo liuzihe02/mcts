@@ -93,4 +93,4 @@ def play(
 
 
 # needs about 1000000 iterations per move to be near-optimal
-play(3, 3, 100000, True, False)
+play(3, 3, 100000, False, False)

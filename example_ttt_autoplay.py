@@ -59,4 +59,4 @@ def autoplay(
         root.display()
 
 
-autoplay(3, 3, 10, False, False)
+autoplay(3, 3, 100000, False, False)

@@ -126,7 +126,7 @@ class MCTS:
     def _UCT(node: Node, c_explore: float) -> Node:
         """UCB for trees (one layer down only)"""
         choices = [
-            (c.Q / c.N) + c_explore * np.sqrt((2 * np.log(node.N) / c.N))
+            (c.Q / c.N) + c_explore * np.sqrt((np.log(node.N) / c.N))
             for c in node.children
         ]
         return node.children[np.argmax(choices)]
