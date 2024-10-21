@@ -1,9 +1,6 @@
-import random
-import math
 import uuid
 import numpy as np
 from games.game import GameState, Move
-from typing import List
 from graphviz import Digraph
 
 
@@ -71,7 +68,8 @@ class TwoPlayerNode(Node):
         wins = self.stats[self.state.turn]
         # loses from the perspective of the first player
         loses = self.stats[GameState.other(self.state.turn)]
-        return wins - loses
+        draws = self.stats["Draw"]
+        return wins - loses - draws
 
     @property
     def N(self):
@@ -81,13 +79,14 @@ class TwoPlayerNode(Node):
         dot = Digraph(comment="MCTS Tree")
         self._add_nodes_to_graph(dot)
         # save a different image each time you call this
+        # can choose either svg for high quality, or png to view simple small trees
         dot.render(
-            f"mcts_tree{str(uuid.uuid4)}", view=False, cleanup=True, format="png"
+            f"mcts_tree{str(uuid.uuid4)}", view=False, cleanup=True, format="svg"
         )
 
     def _add_nodes_to_graph(self, dot: Digraph, parent_id=None):
         node_id = str(id(self))
-        label = f"Visits: {self.visits}\nStats: {self.stats}\nState: \n{self.state}"
+        label = f"Visits: {self.visits} \n Stats: {self.stats} \nState:\n{self.state} \nTo Move:{self.state.turn}"
         dot.node(node_id, label)
 
         if parent_id:

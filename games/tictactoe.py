@@ -142,23 +142,6 @@ class TicTacToeGameState(GameState):
             for coords in list(zip(indices[0], indices[1]))
         ]
 
-    # # display the current board
-    # def display(self):
-    #     # print a single row of the board
-    #     def stringify(row):
-    #         return (
-    #             " "
-    #             + " | ".join(map(lambda x: TicTacToeGameState.V2S[int(x)], row))
-    #             + " "
-    #         )
-
-    #     board = self.board.copy().T[::-1]
-    #     for row in board[:-1]:
-    #         print(stringify(row))
-    #         print("-" * (len(row) * 4 - 1))
-    #     print(stringify(board[-1]))
-    #     print()
-
     def __repr__(self):
         def stringify(row):
             return " " + " | ".join(map(lambda x: self.V2S[int(x)], row)) + " "

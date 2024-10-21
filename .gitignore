@@ -163,3 +163,7 @@ cython_debug/
 
 #venv
 venv/
+
+#image files from the graph rendering code
+*.svg
+*.png

@@ -1,7 +1,4 @@
-import random
-import math
 import numpy as np
-from collections import defaultdict
 
 # look in the same directory as current one
 from .node import TwoPlayerNode
@@ -17,7 +14,8 @@ class MCTS:
     Currently ONLY supports 2 player version.
     """
 
-    def _select(self, root):
+    @staticmethod
+    def _select(root):
         """
         Selects a leaf node in the whole game tree to do the expansion step.
 
@@ -49,7 +47,8 @@ class MCTS:
         # handle terminal node
         return node
 
-    def _expand(self, node: TwoPlayerNode):
+    @staticmethod
+    def _expand(node: TwoPlayerNode):
         """
         Expands the given node by adding a child node with an untried move.
 
@@ -73,7 +72,8 @@ class MCTS:
         node.children.append(child)
         return child
 
-    def _simulate(self, node: TwoPlayerNode):
+    @staticmethod
+    def _simulate(node: TwoPlayerNode):
         """Returns the reward for a random simulation (to completion) of `node`
         Assumed here this node has more unexplored children
         only a single round of simulation"""
@@ -88,7 +88,8 @@ class MCTS:
         # the result of the ending condition of the game. this is a string containing the outcome, followed by the reward
         return cur_state.get_result()
 
-    def _backpropagate(self, node, result):
+    @staticmethod
+    def _backpropagate(node, result):
         """
         Backpropagates the reward value up the tree, updating node statistics.
 
@@ -109,11 +110,10 @@ class MCTS:
             node.stats["P2"] += result[1]
 
         elif result[0] == "Draw":
-            node.stats["P1"] += result[1]
-            node.stats["P2"] += result[1]
+            node.stats["Draw"] += result[1]
 
         if node.parent:
-            self._backpropagate(node.parent, result)
+            MCTS._backpropagate(node.parent, result)
 
     @staticmethod
     def _rollout_policy(moves):
@@ -139,27 +139,32 @@ class MCTS:
         if len(node.children) == 0:
             moves = node.state.get_legal_actions()
             action = MCTS._rollout_policy(moves)
-            return action
+            # this returns an action, but we want it to return a node!
+            # creates a fake node
+            # this takes care of the swapping of players
+            new_state = node.state.move(action)
+            return TwoPlayerNode(state=new_state, parent=node)
 
         # exploitation only
         return MCTS._UCT(node, c_explore=0)
 
-    def train(self, root):
+    @staticmethod
+    def train(root):
         """Make the tree one layer better. (Train for one iteration.)
 
         NOTE: this algo only trains from the root node provided!"""
-        leaf = self._select(root)
+        leaf = MCTS._select(root)
 
         # this node doesnt represent an end state
         if not leaf.state.is_terminal():
             assert len(leaf.unexplored_actions) > 0
-            child = self._expand(leaf)
-            result = self._simulate(child)
+            child = MCTS._expand(leaf)
+            result = MCTS._simulate(child)
             # now we backprop the empty CHILD, which currently has no stats/simulation in it
-            self._backpropagate(child, result)
+            MCTS._backpropagate(child, result)
         else:
-            result = self._simulate(leaf)
-            self._backpropagate(leaf, result)
+            result = MCTS._simulate(leaf)
+            MCTS._backpropagate(leaf, result)
 
         # print("=============================")
         # print("Old leaf node's state is")
