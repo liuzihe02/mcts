@@ -5,25 +5,30 @@ from mcts.node import TwoPlayerNode
 from games.tictactoe import TicTacToeGameState, TicTacToeMove
 
 # define inital state
-init_board = np.zeros((7, 7))
-init_state = TicTacToeGameState(board=init_board, turn="P1", win=4)
+init_board = np.zeros((3, 3))
+init_state = TicTacToeGameState(board=init_board, turn="P1", win=3)
 
 print(init_state)
 
 # we keep this tree throughout the game
 mcts = MCTS()
-node = TwoPlayerNode(init_state, parent=None)
+root = TwoPlayerNode(init_state, parent=None)
+cur_node = root
+
 
 # keep playing until game terminates
-while not node.state.is_terminal():
-    # train for number of iterations
-    for _ in range(10):
-        mcts.train(node)
-    # calculate best move, choose a move in the game, go one level down basically
-    node = MCTS.choose(node)
+while not cur_node.state.is_terminal():
+    # display only the entire game tree, from the root
+    root.display()
 
-    print(node.state)
-    node.display()
+    # train for number of iterations
+    for _ in range(5):
+        mcts.train(cur_node)
+    # calculate best move, choose a move in the game, go one level down basically
+    cur_node = MCTS.choose(cur_node)
+
+    print(cur_node.state)
+
 
 # print result
 print("Result of Game is: ", node.state.get_result()[0])

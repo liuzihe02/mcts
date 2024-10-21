@@ -1,5 +1,6 @@
 import random
 import math
+import uuid
 import numpy as np
 from games.game import GameState, Move
 from typing import List
@@ -76,7 +77,10 @@ class TwoPlayerNode(Node):
     def display(self):
         dot = Digraph(comment="MCTS Tree")
         self._add_nodes_to_graph(dot)
-        dot.render("mcts_tree", view=False, cleanup=True, format="png")
+        # save a different image each time you call this
+        dot.render(
+            f"mcts_tree{str(uuid.uuid4)}", view=False, cleanup=True, format="png"
+        )
 
     def _add_nodes_to_graph(self, dot: Digraph, parent_id=None):
         node_id = str(id(self))

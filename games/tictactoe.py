@@ -98,6 +98,7 @@ class TicTacToeGameState(GameState):
 
     def is_terminal(self):
         """has the game ended yet"""
+
         return self.get_result() is not None
 
     def is_move_legal(self, move: TicTacToeMove):

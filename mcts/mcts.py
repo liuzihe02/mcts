@@ -50,6 +50,8 @@ class MCTS:
         """
         Expands the given node by adding a child node with an untried move.
 
+        When we add a child node and we simulate from this child later on, this child node should have visit>0!
+
         This method implements the expansion step of MCTS.
 
         Args:
@@ -143,6 +145,18 @@ class MCTS:
 
         NOTE: this algo only trains from the root node provided!"""
         leaf = self._select(root)
-        self._expand(leaf)
-        result = self._simulate(leaf)
-        self._backpropagate(leaf, result)
+        child = self._expand(leaf)
+        result = self._simulate(child)
+        # now we backprop the empty CHILD, which currently has no stats/simulation in it
+        self._backpropagate(child, result)
+
+        # print("=============================")
+        # print("Old leaf node's state is")
+        # print(leaf.state)
+
+        # print("Leaf Node has number children", len(leaf.children))
+
+        # for child in leaf.children:
+        #     print("CHILD")
+        #     print(child.stats)
+        #     print(child.state)
