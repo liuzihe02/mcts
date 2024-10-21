@@ -38,14 +38,17 @@ class Node:
         # at initialization, all these new actions are not in the game tree
         self.unexplored_actions = self.state.get_legal_actions()
 
-    def get_unexplored_action(self):
+    def get_unexplored_action(self) -> Move:
         """
         Selects and removes an unexplored action from the list of unexplored action
+
+        Assumes there are unexplored actions!
 
         Returns:
             Action: the last unexplored action from the list of possible actions. Returns None if no actions left.
         """
-        return self.unexplored_actions.pop() if self.unexplored_actions else None
+        # assert len(self.unexplored_actions) > 0
+        return self.unexplored_actions.pop()
 
     @property
     def Q(self):

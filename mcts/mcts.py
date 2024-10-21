@@ -24,7 +24,8 @@ class MCTS:
         This method implements the selection step of MCTS, traversing the tree
         from the root to a leaf node using the UCT formula.
 
-        NOTE: this method only selects a node from the root node given!
+        NOTE: this method only selects a node that exists in the tree branched from the root node!
+        The node selected must have unexplored actions
 
         Args:
             node (Node): The starting node for selection (usually the root).
@@ -37,13 +38,15 @@ class MCTS:
         while not node.state.is_terminal():
             # while this node still has actions that are not in the game tree
             if len(node.unexplored_actions) > 0:
-                return self._expand(node)
+                # this node will be selected for rollout
+                return node
+            # all nodes have already been explored, go one level deeper
             else:
                 # descend one layer deeper, with some exploration
                 # this is the tree policy, different from rollout policy
                 node = MCTS._UCT(node, c_explore=1.4)
 
-        # handle terminal node, or has no children
+        # handle terminal node
         return node
 
     def _expand(self, node: TwoPlayerNode):
@@ -60,7 +63,8 @@ class MCTS:
         Returns:
             Node: The newly created child node, or the input node if fully expanded.
         """
-        # updates this node too
+        assert len(node.unexplored_actions) > 0
+        # updates this node's unexplored actions too
         action = node.get_unexplored_action()
         # advance to the next state
         next_state = node.state.move(action)
@@ -145,10 +149,17 @@ class MCTS:
 
         NOTE: this algo only trains from the root node provided!"""
         leaf = self._select(root)
-        child = self._expand(leaf)
-        result = self._simulate(child)
-        # now we backprop the empty CHILD, which currently has no stats/simulation in it
-        self._backpropagate(child, result)
+
+        # this node doesnt represent an end state
+        if not leaf.state.is_terminal():
+            assert len(leaf.unexplored_actions) > 0
+            child = self._expand(leaf)
+            result = self._simulate(child)
+            # now we backprop the empty CHILD, which currently has no stats/simulation in it
+            self._backpropagate(child, result)
+        else:
+            result = self._simulate(leaf)
+            self._backpropagate(leaf, result)
 
         # print("=============================")
         # print("Old leaf node's state is")
