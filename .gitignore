@@ -167,3 +167,7 @@ venv/
 #image files from the graph rendering code
 *.svg
 *.png
+
+# But don't ignore .svg and .png files in the images folder
+!/images/**/*.svg
+!/images/**/*.png
