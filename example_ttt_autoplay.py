@@ -39,4 +39,4 @@ def autoplay(board_size, win_cond, train_iterations, from_root: bool):
     print("Stats from Root is", root.stats)
 
 
-autoplay(3, 3, 10000, True)
+autoplay(3, 3, 100000, True)

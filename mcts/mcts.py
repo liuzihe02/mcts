@@ -1,8 +1,9 @@
 import numpy as np
 
 # look in the same directory as current one
-from .node import TwoPlayerNode
+from .node import Node, TwoPlayerNode
 from games.game import GameState
+from typing import Tuple
 
 
 class MCTS:
@@ -15,7 +16,7 @@ class MCTS:
     """
 
     @staticmethod
-    def _select(root):
+    def _select(root) -> Node:
         """
         Selects a leaf node in the whole game tree to do the expansion step.
 
@@ -48,7 +49,7 @@ class MCTS:
         return node
 
     @staticmethod
-    def _expand(node: TwoPlayerNode):
+    def _expand(node: Node):
         """
         Expands the given node by adding a child node with an untried move.
 
@@ -73,7 +74,7 @@ class MCTS:
         return child
 
     @staticmethod
-    def _simulate(node: TwoPlayerNode):
+    def _simulate(node: Node):
         """Returns the reward for a random simulation (to completion) of `node`
         Assumed here this node has more unexplored children
         only a single round of simulation"""
@@ -89,7 +90,7 @@ class MCTS:
         return cur_state.get_result()
 
     @staticmethod
-    def _backpropagate(node, result):
+    def _backpropagate(node: Node, result: Tuple[str, int]):
         """
         Backpropagates the reward value up the tree, updating node statistics.
 

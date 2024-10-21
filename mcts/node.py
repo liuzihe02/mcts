@@ -2,6 +2,7 @@ import uuid
 import numpy as np
 from games.game import GameState, Move
 from graphviz import Digraph
+from typing import Dict
 
 
 class Node:
@@ -31,7 +32,7 @@ class Node:
         # any new element will be initialized with the integer 0
 
         # MUST BE IMPLEMENTED BY CHILD CLASS
-        self.stats = None
+        self.stats: Dict[str, float] = {}
         # at initialization, all these new actions are not in the game tree
         self.unexplored_actions = self.state.get_legal_actions()
 
@@ -65,9 +66,9 @@ class TwoPlayerNode(Node):
     def Q(self):
         # ensure of whether choose parent state or my state
         # TODO: note that turn is not implemented in the abstract class
-        wins = self.stats[self.state.turn]
+        wins = self.stats[self.state.get_turn()]
         # loses from the perspective of the first player
-        loses = self.stats[GameState.other(self.state.turn)]
+        loses = self.stats[GameState.other(self.state.get_turn())]
         draws = self.stats["Draw"]
         return wins - loses - draws
 
@@ -86,7 +87,7 @@ class TwoPlayerNode(Node):
 
     def _add_nodes_to_graph(self, dot: Digraph, parent_id=None):
         node_id = str(id(self))
-        label = f"Visits: {self.visits} \n Stats: {self.stats} \nState:\n{self.state} \nTo Move:{self.state.turn}"
+        label = f"Visits: {self.visits} \n Stats: {self.stats} \nState:\n{self.state} \nTo Move:{self.state.get_turn()}"
         dot.node(node_id, label)
 
         if parent_id:

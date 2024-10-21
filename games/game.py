@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Tuple
 
 """
 @classmethod has access to the class and can access or modify class state.
@@ -15,7 +15,7 @@ class GameState(ABC):
     """this represents a distinct game state, not the overall environment!"""
 
     @abstractmethod
-    def get_result(self):
+    def get_result(self) -> Tuple[str, int]:
         """
         the final game result as a tuple of (Outcome, Reward)
         like ("P1",2)
@@ -55,6 +55,16 @@ class GameState(ABC):
         list of AbstractGameAction
 
         """
+        pass
+
+    @abstractmethod
+    def get_turn(self) -> str:
+        """_summary_
+
+        Returns:
+            str: the player whose turn it is to move next
+        """
+        pass
 
     @staticmethod
     def other(turn):

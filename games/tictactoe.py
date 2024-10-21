@@ -36,6 +36,7 @@ class TicTacToeGameState(GameState):
     V2S = {1: "X", -1: "O", 0: " "}
 
     def __init__(self, board: np.ndarray, win: int, turn: str):
+        super().__init__()
         # check validity of board
         if len(board.shape) != 2 or board.shape[0] != board.shape[1]:
             raise ValueError("Only 2D square boards allowed")
@@ -95,6 +96,9 @@ class TicTacToeGameState(GameState):
 
         # if not over - no result
         return None
+
+    def get_turn(self):
+        return self.turn
 
     def is_terminal(self):
         """has the game ended yet"""
