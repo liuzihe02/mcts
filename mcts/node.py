@@ -76,11 +76,11 @@ class TwoPlayerNode(Node):
     def display(self):
         dot = Digraph(comment="MCTS Tree")
         self._add_nodes_to_graph(dot)
-        dot.render("mcts_tree", view=True, format="png")
+        dot.render("mcts_tree", view=False, cleanup=True, format="png")
 
-    def _add_nodes_to_graph(self, dot, parent_id=None):
+    def _add_nodes_to_graph(self, dot: Digraph, parent_id=None):
         node_id = str(id(self))
-        label = f"Visits: {self.visits}\nStats: {self.stats}\nState: {self.state}"
+        label = f"Visits: {self.visits}\nStats: {self.stats}\nState: \n{self.state}"
         dot.node(node_id, label)
 
         if parent_id:

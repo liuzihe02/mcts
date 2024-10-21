@@ -17,12 +17,13 @@ node = TwoPlayerNode(init_state, parent=None)
 # keep playing until game terminates
 while not node.state.is_terminal():
     # train for number of iterations
-    for _ in range(50):
+    for _ in range(10):
         mcts.train(node)
     # calculate best move, choose a move in the game, go one level down basically
     node = MCTS.choose(node)
 
     print(node.state)
+    node.display()
 
 # print result
 print("Result of Game is: ", node.state.get_result()[0])
