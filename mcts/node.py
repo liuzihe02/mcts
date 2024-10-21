@@ -83,9 +83,7 @@ class TwoPlayerNode(Node):
         self._add_nodes_to_graph(dot)
         # save a different image each time you call this
         # can choose either svg for high quality, or png to view simple small trees
-        dot.render(
-            f"mcts_tree{str(uuid.uuid4)}", view=False, cleanup=True, format="svg"
-        )
+        dot.render("mcts_tree", view=False, cleanup=True, format="png")
 
     def _add_nodes_to_graph(self, dot: Digraph, parent_id=None):
         node_id = str(id(self))

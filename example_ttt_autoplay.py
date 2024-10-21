@@ -6,7 +6,11 @@ from games.tictactoe import TicTacToeGameState
 
 
 def autoplay(
-    board_size: int, win_cond: int, train_iterations: int, train_from_root: bool
+    board_size: int,
+    win_cond: int,
+    train_iterations: int,
+    train_from_root: bool,
+    display: bool,
 ):
     """
     runs a simulation game of 2 players tic tac toe.
@@ -17,6 +21,7 @@ def autoplay(
         win_cond (int): the number of elems in a row/col/diagonal to hit to fulfill the win condition
         train_iterations (int): at every chosen action, how many iterations to train in MCTS
         from_root (bool): at every chosen action, do I do the training from the root node of the game tree, or from the current node of the game.
+        display (bool): whether or not to display the entire game tree in the end, as a png. Not reccomended for huge game trees.
     """
     # define inital state
     init_board = np.zeros((board_size, board_size))
@@ -50,5 +55,8 @@ def autoplay(
     print("Result of Game is: ", cur_node.state.get_result()[0])  # type: ignore #here, get_result should always return the tuple
     print("Stats from Root is", root.stats)
 
+    if display:
+        root.display()
 
-autoplay(3, 3, 1000, False)
+
+autoplay(3, 3, 10, False, False)
