@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 """
 @classmethod has access to the class and can access or modify class state.
@@ -7,19 +7,22 @@ from typing import List, Tuple
 """
 
 
-class Move(ABC):
+class Action(ABC):
+    """abstract class for an action in the environment"""
+
     pass
 
 
 class GameState(ABC):
-    """this represents a distinct game state, not the overall environment!"""
+    """
+    This represents a distinct game state, not the overall environment!
+    The overall environment is handled by Node
+    """
 
     @abstractmethod
-    def get_result(self) -> Tuple[str, int]:
+    def get_result(self) -> Optional[Tuple[str, int]]:
         """
-        the final game result as a tuple of (Outcome, Reward)
-        like ("P1",2)
-
+        returns the final game result as a tuple of (Outcome, Reward), like ("P1",2)
         returns None if the game isnt over
         """
         pass
@@ -27,52 +30,36 @@ class GameState(ABC):
     @abstractmethod
     def is_terminal(self) -> bool:
         """
-        boolean indicating if the game is over,
-        simplest implementation may just be
-
-        Returns
-        -------
-        boolean
-
+        returns boolean indicating if the game is over
         """
         pass
 
     @abstractmethod
     # this is a forward reference to the class itself
-    def move(self, action) -> "GameState":
+    def act(self, action) -> "GameState":
         """
-        consumes action and returns another state of type Game
-
+        consumes action and returns another state of type GameState
         """
         pass
 
     @abstractmethod
-    def get_legal_actions(self) -> List[Move]:
+    def get_legal_actions(self) -> List[Action]:
         """
         returns list of legal action at current game state
-        Returns
-        -------
-        list of AbstractGameAction
-
         """
         pass
 
     @abstractmethod
     def get_turn(self) -> str:
-        """_summary_
-
-        Returns:
-            str: the player whose turn it is to move next
+        """
+        returns the player whose turn it is to act next
         """
         pass
 
     @staticmethod
-    def other(turn):
-        """returns the other player's name, as a string
-
-        class method of the GameState
-
-        Args:
-            turn (str): a string of the other player
+    def other(turn) -> str:
+        """
+        returns the other player's name, as a string
+        static method of the GameState.
         """
         return "P2" if turn == "P1" else "P1"

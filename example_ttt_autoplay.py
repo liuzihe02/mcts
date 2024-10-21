@@ -35,8 +35,8 @@ def autoplay(board_size, win_cond, train_iterations, from_root: bool):
         print(cur_node.state)
 
     # print result
-    print("Result of Game is: ", cur_node.state.get_result()[0])
+    print("Result of Game is: ", cur_node.state.get_result()[0])  # type: ignore #here, get_result should always return the tuple
     print("Stats from Root is", root.stats)
 
 
-autoplay(3, 3, 100000, True)
+autoplay(3, 3, 1000, True)

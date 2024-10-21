@@ -1,6 +1,6 @@
 import uuid
 import numpy as np
-from games.game import GameState, Move
+from games.game import GameState, Action
 from graphviz import Digraph
 from typing import Dict
 
@@ -8,8 +8,9 @@ from typing import Dict
 class Node:
     """
     Represents a node in the MCTS game tree.
-    These are nodes that already have been expanded on.
-    This also represents a single board state, along with relevant statistics tracking win rates
+    This also represents a single board state, along with relevant statistics tracking win/lose rewards for different players.
+
+    This node contains the board class, which contains info on whose turn it is to move
     """
 
     def __init__(self, state: GameState, parent=None):
@@ -17,26 +18,27 @@ class Node:
         Initializes a new node.
 
         Args:
-            state (Game): The game state at this node
+            state (GameState): The state of the game, that this node represents
             parent (Node): The parent node (None for the root).
         """
         self.state = state
         self.parent = parent
         # these are all the children nodes that have been explored, and are in the game tree
+        # each time we expand on a leaf node, we consume an action from the unexplored actions, and add the new board state to children
         self.children = []
         # Number of times this node has been visited, by any player so far
         self.visits = 0
 
         # this is a dictionary, where each key-value corresponds to outcome-number
         # example, if there are 2 players, this would be {p1_wins:2,p2_wins:3,draws:4}
-        # any new element will be initialized with the integer 0
 
         # MUST BE IMPLEMENTED BY CHILD CLASS
         self.stats: Dict[str, float] = {}
         # at initialization, all these new actions are not in the game tree
+        # add all the possible actions into unexplored_actions
         self.unexplored_actions = self.state.get_legal_actions()
 
-    def get_unexplored_action(self) -> Move:
+    def get_unexplored_action(self) -> Action:
         """
         Selects and removes an unexplored action from the list of unexplored action
 

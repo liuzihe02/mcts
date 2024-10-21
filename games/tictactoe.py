@@ -1,8 +1,13 @@
 import numpy as np
-from .game import GameState, Move
+from .game import GameState, Action
+from typing import Tuple, Optional, List
 
 
-class TicTacToeMove(Move):
+class TicTacToeMove(Action):
+    """
+    A move in TicTacToe. NOTE: that in TicTacToe, moves are interchangeable with actions
+    """
+
     def __init__(self, x_coord, y_coord, turn, value):
         self.x_coord = x_coord
         self.y_coord = y_coord
@@ -19,12 +24,11 @@ class TicTacToeMove(Move):
 
 class TicTacToeGameState(GameState):
     """
-    currently only supports 2 player implementation
 
     NOTE:
     Player 1 - represented by X - value of 1
     Player 2 - represented by O - value of -1
-    Empty Squares - value of 0
+    Empty Squares - represented by empty string - value of 0
 
     Player 1 will always START FIRST!
     """
@@ -51,9 +55,10 @@ class TicTacToeGameState(GameState):
         # the turn here represent which player it is to MOVE NEXT
         self.turn = turn
 
-    def get_result(self):
+    def get_result(self) -> Optional[Tuple[str, float]]:
         """
-        return None if the game is not over yet
+        returns the result of the game state, if it is terminal.
+        returns None if the state is not terminal.
         """
 
         """
@@ -94,18 +99,19 @@ class TicTacToeGameState(GameState):
             # give 0.5 to both
             return ("Draw", 0.5)
 
-        # if not over - no result
+        # if the game is not over (board state is not terminal) - no result
         return None
 
-    def get_turn(self):
+    def get_turn(self) -> str:
+        """getter method for turn"""
         return self.turn
 
-    def is_terminal(self):
+    def is_terminal(self) -> bool:
         """has the game ended yet"""
-
         return self.get_result() is not None
 
-    def is_move_legal(self, move: TicTacToeMove):
+    def is_move_legal(self, move: TicTacToeMove) -> bool:
+        """checks is a specific move is legal"""
         # check if correct player moves
         if move.turn != self.turn:
             return False
@@ -123,7 +129,7 @@ class TicTacToeGameState(GameState):
         # finally check if board field not occupied yet
         return self.board[move.x_coord, move.y_coord] == 0
 
-    def move(self, move: TicTacToeMove):
+    def act(self, move: TicTacToeMove) -> "TicTacToeGameState":
         # move here already contains information about whose turn it is to move
         # check if legal
         if not self.is_move_legal(move):
@@ -137,7 +143,7 @@ class TicTacToeGameState(GameState):
         # FLIP to the opponent's turn, and return the new BoardState
         return TicTacToeGameState(new_board, self.win, GameState.other(self.turn))
 
-    def get_legal_actions(self):
+    def get_legal_actions(self) -> List[TicTacToeMove]:
         indices = np.where(self.board == 0)
         return [
             TicTacToeMove(
