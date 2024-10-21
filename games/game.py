@@ -20,6 +20,16 @@ class GameState(ABC):
     """
 
     @abstractmethod
+    # this is a forward reference to the class itself
+    def act(self, action: Action) -> "GameState":
+        """
+        consumes action and returns another state of type GameState
+
+        NOTE: only in act, do we flip the turn of the game. In no other functions should we actually advance the state of the game.
+        """
+        pass
+
+    @abstractmethod
     def get_result(self) -> Optional[Tuple[str, int]]:
         """
         returns the final game result as a tuple of (Outcome, Reward), like ("P1",2)
@@ -31,14 +41,6 @@ class GameState(ABC):
     def is_terminal(self) -> bool:
         """
         returns boolean indicating if the game is over
-        """
-        pass
-
-    @abstractmethod
-    # this is a forward reference to the class itself
-    def act(self, action) -> "GameState":
-        """
-        consumes action and returns another state of type GameState
         """
         pass
 

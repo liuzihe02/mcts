@@ -133,7 +133,10 @@ class MCTS:
 
     @staticmethod
     def choose(node: Node) -> Node:
-        "Choose the best successor of node. (Choose a move while playing game)"
+        """
+        Choose the best successor of node. (Choose a move while playing game)
+        NOTE: This node be a terminal node.
+        """
         if node.state.is_terminal():
             raise RuntimeError(f"choose called on terminal node {node}")
 

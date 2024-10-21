@@ -5,7 +5,19 @@ from mcts.node import TwoPlayerNode
 from games.tictactoe import TicTacToeGameState
 
 
-def autoplay(board_size, win_cond, train_iterations, from_root: bool):
+def autoplay(
+    board_size: int, win_cond: int, train_iterations: int, train_from_root: bool
+):
+    """
+    runs a simulation game of 2 players tic tac toe.
+    strategy is to use pure exploitation of the trained MCTS game tree.
+
+    Args:
+        board_size (int): width or height of the 2D board size
+        win_cond (int): the number of elems in a row/col/diagonal to hit to fulfill the win condition
+        train_iterations (int): at every chosen action, how many iterations to train in MCTS
+        from_root (bool): at every chosen action, do I do the training from the root node of the game tree, or from the current node of the game.
+    """
     # define inital state
     init_board = np.zeros((board_size, board_size))
     init_state = TicTacToeGameState(board=init_board, turn="P1", win=win_cond)
@@ -23,7 +35,7 @@ def autoplay(board_size, win_cond, train_iterations, from_root: bool):
 
         # train for number of iterations
         for _ in range(train_iterations):
-            if from_root:
+            if train_from_root:
                 # currently doesnt work if you train from root, only works if you train from cur_node
                 MCTS.train(root)
             else:
@@ -39,4 +51,4 @@ def autoplay(board_size, win_cond, train_iterations, from_root: bool):
     print("Stats from Root is", root.stats)
 
 
-autoplay(3, 3, 1000, True)
+autoplay(3, 3, 1000, False)

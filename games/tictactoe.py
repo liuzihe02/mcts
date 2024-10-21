@@ -17,8 +17,8 @@ class TicTacToeMove(Action):
         self.value = value
 
     def __repr__(self):
-        return "x:{0} y:{1} turn:{2} value:{3}".format(
-            self.x_coord, self.y_coord, self.turn, self.value
+        return "x:{0} y:{1} turn:{2} symbol:{3}".format(
+            self.x_coord, self.y_coord, self.turn, TicTacToeGameState.V2S[self.value]
         )
 
 
@@ -133,21 +133,20 @@ class TicTacToeGameState(GameState):
         # move here already contains information about whose turn it is to move
         # check if legal
         if not self.is_move_legal(move):
-            raise ValueError(
-                "move {0} on board {1} is not legal".format(move, self.board)
-            )
+            raise ValueError("MOVE {0} on board \n{1} is not legal".format(move, self))
         # create a copy of the board
         new_board = np.copy(self.board)
         # update the board
         new_board[move.x_coord, move.y_coord] = move.value
+        # THIS TAKES CARE OF THE FLIPPING OF THE MOVE
         # FLIP to the opponent's turn, and return the new BoardState
-        return TicTacToeGameState(new_board, self.win, GameState.other(self.turn))
+        return TicTacToeGameState(new_board, self.win, GameState.other(self.get_turn()))
 
     def get_legal_actions(self) -> List[TicTacToeMove]:
         indices = np.where(self.board == 0)
         return [
             TicTacToeMove(
-                coords[0], coords[1], self.turn, TicTacToeGameState.P2V[self.turn]
+                coords[0], coords[1], self.turn, TicTacToeGameState.P2V[self.get_turn()]
             )
             for coords in list(zip(indices[0], indices[1]))
         ]
@@ -160,4 +159,4 @@ class TicTacToeGameState(GameState):
         rows = [stringify(row) for row in board]
         separator = "\n" + "-" * (len(board[0]) * 4 - 1) + "\n"
 
-        return separator.join(rows) + "\n\n"
+        return "\n" + separator.join(rows) + "\n"
