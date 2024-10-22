@@ -108,11 +108,28 @@ def select(node):
         if node is not fully expanded (has unexplored actions):
             return node
         else:
-            UCT_traversal(node)
+            node = UCT(node)
     return node
 
 def expand(node):
-    
+    assert unexplored actions>0
+    get an unexplored action
+    add this action as a child (to the game tree)
+
+def simulate(node):
+    while state is not terminal
+        choose an action
+        move the state
+    return the result of game
+
+def backpropagate(node,result):
+    update this node
+    if parent exists:
+        backpropagate(parent,result)
+
+def UCT(node):
+    compute (child.win/child.visit)+ c*np.sqrt((np.log(parent.visit)/child.visit))
+    return child giving max value
 ```
 
 
