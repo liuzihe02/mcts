@@ -119,7 +119,7 @@ def expand(node):
 
 def simulate(node):
     while state is not terminal
-        choose an action
+        choose an action (rollout policy)
         move the state
     return the result of game
 

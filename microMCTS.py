@@ -30,10 +30,10 @@ class Node:
 class TTT:
     @staticmethod
     def is_terminal(board):
-        return TTT.find_winner(board) is not None
+        return TTT.get_winner(board) is not None
 
     @staticmethod
-    def find_winner(board):
+    def get_winner(board):
         # return 1 if player 1 wins, -1 if player 2 wins, and None otherwise
 
         # check rows
@@ -117,18 +117,12 @@ class MCTS:
         cur_board = node.board.copy()
         while not TTT.is_terminal(cur_board):
             # rollout policy
-            # get all available positions FROM THIS board!
-            all_possible = TTT.get_legal(cur_board)
-            random_action = all_possible[np.random.randint(len(all_possible))]
-            row, col = random_action
-            cur_board = cur_board.copy()
-            # edit the position of the cur_board
-            cur_board[row, col] = next_turn
+            cur_board = self.rollout_policy(cur_board, next_turn)
             # flip to next turn
             next_turn = -1 * next_turn
 
         # terminal state, should return -1,0,or 1
-        return TTT.find_winner(cur_board)
+        return TTT.get_winner(cur_board)
 
     def backpropagate(self, node: Node, reward):
         node.visits += 1
@@ -158,15 +152,20 @@ class MCTS:
             return self.UCT(node, 0)
         # create a dummy node
         else:
-            all_possible = TTT.get_legal(node.board)
-            random_action = all_possible[np.random.randint(len(all_possible))]
-            row, col = random_action
-            new_board = node.board.copy()
-            # edit the position of the cur_board
-            new_board[row, col] = node.turn
-
+            new_board = self.rollout_policy(node.board, node.turn)
             # flip the turn, no parent
             return Node(new_board, -1 * node.turn, None)
+
+    def rollout_policy(self, board, turn):
+        # takes a random action on board using that turn and returns a new board
+        # first get all possible positions on this board
+        all_possible = TTT.get_legal(board)
+        random_action = all_possible[np.random.randint(len(all_possible))]
+        row, col = random_action
+        new_board = board.copy()
+        # edit the position of the cur_board
+        new_board[row, col] = turn
+        return new_board
 
 
 # extra debug function
@@ -204,5 +203,4 @@ while not TTT.is_terminal(node.board):
     print(node.board)
 
 print("===GAME END===")
-
 print("root node stats are", root.stats)
