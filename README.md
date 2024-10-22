@@ -112,9 +112,10 @@ def select(node):
     return node
 
 def expand(node):
-    assert unexplored actions>0
-    get an unexplored action
+    assert unexplored_actions>0
+    action = unexplored_actions.pop()
     add this action as a child (to the game tree)
+    return child
 
 def simulate(node):
     while state is not terminal
@@ -127,9 +128,19 @@ def backpropagate(node,result):
     if parent exists:
         backpropagate(parent,result)
 
-def UCT(node):
-    compute (child.win/child.visit)+ c*np.sqrt((np.log(parent.visit)/child.visit))
-    return child giving max value
+def UCT(node,c):
+    choices = (child.value/child.visits)+ c*np.sqrt((np.log(parent.visits)/child.visits))
+    return node.children[argmax(choices)]
+
+def train(root):
+    leaf=select(root)
+    if leaf has unexplored actions:
+        child=expand(leaf)
+        reward=simulate(child)
+        backpropagate(child,reward)
+    else:
+        reward=simulate(leaf)
+        backpropagate(leaf, reward)
 ```
 
 

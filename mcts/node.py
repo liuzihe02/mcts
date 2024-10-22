@@ -38,7 +38,7 @@ class Node:
 
     def get_unexplored_action(self) -> Action:
         """
-        Selects and removes an unexplored action from the list of unexplored action
+        Selects and REMOVES an unexplored action from the list of unexplored action
 
         Assumes there are unexplored actions!
 

@@ -66,6 +66,7 @@ class TTT:
         return None
 
     @staticmethod
+    # gets all the possible moves for a board state
     def get_legal(board):
         # returns a list of legal (row,col) positions
         positions = np.where(board == 0)
