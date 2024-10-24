@@ -6,7 +6,7 @@ A game tree is a tree data structure, where every node represents a distinct *st
 
 > We use "action" and "move" interchangeably in the context of games
 
-<img src=images/tree.png width=400>
+<img src=tree.png width=400>
 
 - The *root* of the game tree represents the initial state of the game
 - Any transition from one state to another consists a *move*
@@ -14,7 +14,7 @@ A game tree is a tree data structure, where every node represents a distinct *st
 
 ## Monte Carlo Tree Search
 
-<img src="images/UCT.png" width=300>
+<img src="UCT.png" width=300>
 
 *Taken from CadiaPlayer*
 
@@ -26,7 +26,7 @@ This way we make the game tree contain better estimates of the values of each st
 
 ### Selection
 
-<img src="images/selection.png" width=400>
+<img src="selection.png" width=400>
 
 > The bold circles contain the nodes selected using the tree policy UCT. The color of the node represent whose turn it is to move next. The numbers in the nodes represent the statistics of the node. For example, a black circle with $7/10$ means black to move next, $7$ wins played from this state, total of $10$ visits at this state. Hence if there are no draws, white would have won $3$ times from this node.
 
@@ -50,7 +50,7 @@ for a parent node $v$, child node $v_i$, and number of wins $w$ from this child 
 
 ### Expansion
 
-<img src="images/expansion.png" width=400>
+<img src="expansion.png" width=400>
 
 > $3/3$ still has unexplored actions, hence we add a child node to it. This action then becomes "explored"
 
@@ -58,7 +58,7 @@ The second phase expansion occurs when we've selected a leaf node $L$ to expand 
 
 ### Simulation
 
-<img src="images/simulation.png" width=400>
+<img src="simulation.png" width=400>
 
 > Once the new child is added to the tree, we do one rollout from the $0/0$ until game termination
 
@@ -66,7 +66,7 @@ We do one simulation (rollout) from the new child node $C$ until game terminatio
 
 ### Backpropagation
 
-<img src="images/backpropagation.png" width=400>
+<img src="backpropagation.png" width=400>
 
 > We can see only black nodes have their win count updated.
 
