@@ -171,3 +171,6 @@ venv/
 # But don't ignore .svg and .png files in the images folder
 !/images/**/*.svg
 !/images/**/*.png
+
+#ignore this folder
+challenge/

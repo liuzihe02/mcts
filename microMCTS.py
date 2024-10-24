@@ -1,13 +1,16 @@
 import numpy as np
 
 
+# contains information about state, children nodes and states
 class Node:
     def __init__(self, board, turn, parent=None):
         # state contains info about the turn too
         self.board: np.ndarray = board
         # string, contains whose turn it is to play NEXT
         self.turn = turn
+        # parent node
         self.parent = parent
+        # number of visits to this node
         self.visits = 0
         # 1 for player 1 win, -1 for player 2 win, 0 for draws
         self.stats = {1: 0, -1: 0, 0: 0}
@@ -75,6 +78,7 @@ class TTT:
 
 
 class MCTS:
+    # Upper confidence bound for trees
     def UCT(self, node, c):
         all_v = [
             (child.Q / child.N + c * np.sqrt(np.log(node.visits) / child.N))
